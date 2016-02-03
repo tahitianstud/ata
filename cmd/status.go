@@ -34,6 +34,14 @@ to quickly create a Cobra application.`,
 		// TODO: Work your own magic here
 		fmt.Println("status called")
 		fmt.Println("TODO: implement me !")
+
+		if VerboseMode() {
+			fmt.Println("VERBOSE MODE: activated")
+		}
+
+		if DebugMode() {
+			fmt.Println("DEBUG MODE: activated")
+		}
 	},
 }
 

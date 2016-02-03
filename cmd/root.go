@@ -20,6 +20,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	log "github.com/tahitianstud/ata/logging"
 )
 
 var cfgFile string
@@ -39,17 +40,10 @@ hosts and multiple environments.`,
 // Execute adds all child commands to the root command sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	fmt.Println("Hello, World !")
-
 	if err := RootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(-1)
 	}
-
-	fmt.Printf("DEBUG MODE: %v\n", DebugMode())
-	fmt.Printf("VERBOSE MODE: %v\n", VerboseMode())
-
-	// TODO: set global flags for logging using the two flags
 }
 
 // VerboseMode indicates if the flag for verbosity is set or not
@@ -95,5 +89,16 @@ func initConfig() {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 
-	// deal with verbose and debug mode
+	// TODO: deal with verbose and debug mode
+	log.InitLogger()
+	if VerboseMode() {
+		log.VerboseMode()
+	}
+	if DebugMode() {
+		log.DebugMode()
+	}
+	log.Trace("Configuring logging subsystem using flags...")
+	log.Info("Logging subsystem initialized")
+	log.Debug("Successfully activated logging !")
+
 }
