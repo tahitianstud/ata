@@ -34,8 +34,6 @@ to quickly create a Cobra application.`,
 		// TODO: Work your own magic here
 		fmt.Println("status called")
 		fmt.Println("TODO: implement me !")
-		cmd.DebugFlags()
-
 	},
 }
 
