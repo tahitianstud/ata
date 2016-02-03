@@ -33,8 +33,8 @@ func Info(message string) {
 	log.Info(message)
 }
 
-// Trace prints out a Info level message but only when in Verbose mode
-func Trace(message string) {
+// Step prints out a Info level message but only when in Verbose mode
+func Step(message string) {
 	if verboseMode == true {
 		log.Info(message)
 	}
@@ -43,4 +43,11 @@ func Trace(message string) {
 // Debug prints out a Debug level message
 func Debug(message string) {
 	log.Debug(message)
+} // Debug prints out a Debug level message
+
+// Trace prints out more Debug level messages if Verbose activated
+func Trace(message string) {
+	if verboseMode {
+		log.Debug(message)
+	}
 }

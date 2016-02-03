@@ -97,8 +97,8 @@ func initConfig() {
 	if DebugMode() {
 		log.DebugMode()
 	}
-	log.Trace("Configuring logging subsystem using flags...")
+	log.Step("Configuring logging subsystem using flags...")
 	log.Info("Logging subsystem initialized")
 	log.Debug("Successfully activated logging !")
-
+	log.Trace("End of logging initialization")
 }
