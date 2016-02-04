@@ -20,7 +20,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	log "github.com/tahitianstud/ata/logging"
+	log "github.com/tahitianstud/utils/logging"
 )
 
 var cfgFile string
@@ -90,7 +90,6 @@ func initConfig() {
 	}
 
 	// TODO: deal with verbose and debug mode
-	log.InitLogger()
 	if VerboseMode() {
 		log.VerboseMode()
 	}

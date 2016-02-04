@@ -14,8 +14,44 @@
 
 package main
 
-import "github.com/tahitianstud/ata/cmd"
+import (
+	"net/http"
+	"os/exec"
+	"strings"
+
+	"github.com/tahitianstud/ata/cmd"
+	log "github.com/tahitianstud/utils/logging"
+)
+
+const ok = "OK"
+
+var Assets http.FileSystem = http.Dir("scripts")
 
 func main() {
+	// TODO: check for environment conditions:
+
+	// - detect bash
+	out, bashErr := exec.Command("bash", "-c", "echo "+ok).Output()
+	output := strings.TrimSpace(string(out))
+	if bashErr != nil || output != ok {
+		log.Die("Bash environment not found")
+	}
+
+	// check opening file
+	// file, fileErr := static.Open("status.sh")
+	// if fileErr != nil {
+	// 	log.Fatal(fileErr.Error())
+	// }
+	// fmt.Print(file)
+	// defer file.Close()
+
+	// if Assets == nil {
+	// 	log.Die("Assets not found. Have you generated the resources ?")
+	// }
+
+	// - docker installed (check version too)
+	// - docker-compose installed
+	// - git installed
+
 	cmd.Execute()
 }
