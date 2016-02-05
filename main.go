@@ -15,27 +15,27 @@
 package main
 
 import (
-	"net/http"
 	"os/exec"
 	"strings"
 
 	"github.com/tahitianstud/ata/cmd"
-	log "github.com/tahitianstud/utils/logging"
+	"github.com/tahitianstud/ata/config"
+	"github.com/tahitianstud/utils/logging"
 )
 
 const ok = "OK"
 
-var Assets http.FileSystem = http.Dir("scripts")
-
 func main() {
+	config.LoadDependencies()
+
 	// TODO: check for environment conditions:
 
 	// - detect bash
 	out, bashErr := exec.Command("bash", "-c", "echo "+ok).Output()
 	output := strings.TrimSpace(string(out))
 	if bashErr != nil || output != ok {
-		mylogger := log.FrameworkLoggerInstance(true)
-		mylogger.Die("Bash environment not found")
+		mylogger := logging.New()
+		mylogger.Fatal("Bash environment not found")
 	}
 
 	// TODO: deal with embedded scripts to use

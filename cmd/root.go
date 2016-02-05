@@ -20,7 +20,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	log "github.com/tahitianstud/utils/logging"
+	"github.com/tahitianstud/utils/logging"
 )
 
 var cfgFile string
@@ -90,11 +90,13 @@ func initConfig() {
 	}
 
 	// TODO: deal with verbose and debug mode
-	mylogger := log.FrameworkLoggerInstance(VerboseMode())
+	mylogger := logging.New()
 	if DebugMode() {
-		mylogger.DebugMode()
+		mylogger.SetLevel(logging.DebugLevel)
 	}
-	mylogger.Step("Configuring logging subsystem using flags...")
+	fmt.Printf("Verbose mode is: %v\n", VerboseMode())
+	mylogger.ActivateVerboseOutput(VerboseMode())
+	mylogger.Info("Configuring logging subsystem using flags...")
 	mylogger.Info("Logging subsystem initialized")
 	mylogger.Debug("Successfully activated logging !")
 	mylogger.Trace("End of logging initialization")
