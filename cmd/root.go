@@ -90,14 +90,12 @@ func initConfig() {
 	}
 
 	// TODO: deal with verbose and debug mode
-	if VerboseMode() {
-		log.VerboseMode()
-	}
+	mylogger := log.FrameworkLoggerInstance(VerboseMode())
 	if DebugMode() {
-		log.DebugMode()
+		mylogger.DebugMode()
 	}
-	log.Step("Configuring logging subsystem using flags...")
-	log.Info("Logging subsystem initialized")
-	log.Debug("Successfully activated logging !")
-	log.Trace("End of logging initialization")
+	mylogger.Step("Configuring logging subsystem using flags...")
+	mylogger.Info("Logging subsystem initialized")
+	mylogger.Debug("Successfully activated logging !")
+	mylogger.Trace("End of logging initialization")
 }

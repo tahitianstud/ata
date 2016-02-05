@@ -34,8 +34,11 @@ func main() {
 	out, bashErr := exec.Command("bash", "-c", "echo "+ok).Output()
 	output := strings.TrimSpace(string(out))
 	if bashErr != nil || output != ok {
-		log.Die("Bash environment not found")
+		mylogger := log.FrameworkLoggerInstance(true)
+		mylogger.Die("Bash environment not found")
 	}
+
+	// TODO: deal with embedded scripts to use
 
 	// check opening file
 	// file, fileErr := static.Open("status.sh")
