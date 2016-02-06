@@ -26,7 +26,7 @@ import (
 const ok = "OK"
 
 func main() {
-	config.LoadDependencies()
+	config.Inject()
 
 	// TODO: check for environment conditions:
 

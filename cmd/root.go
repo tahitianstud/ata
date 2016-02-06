@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -92,12 +93,14 @@ func initConfig() {
 	// TODO: deal with verbose and debug mode
 	mylogger := logging.New()
 	if DebugMode() {
+		fmt.Println("Activating debug mode")
 		mylogger.SetLevel(logging.DebugLevel)
 	}
-	fmt.Printf("Verbose mode is: %v\n", VerboseMode())
 	mylogger.ActivateVerboseOutput(VerboseMode())
 	mylogger.Info("Configuring logging subsystem using flags...")
 	mylogger.Info("Logging subsystem initialized")
 	mylogger.Debug("Successfully activated logging !")
 	mylogger.Trace("End of logging initialization")
+
+	log.Printf("MYTEST my message")
 }
