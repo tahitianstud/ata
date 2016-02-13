@@ -1,0 +1,6 @@
+package cmd
+
+const (
+	DEFAULT_WORK_DIRECTORY = "."
+	DEFAULT_ENVIRONMENT = "LOCAL"
+)

@@ -52,6 +52,9 @@ var statusCmd = &cobra.Command{
 		case 1:
 			env = strings.ToUpper(args[0])
 			app = utils.GuessAppFromLocation()
+		case 0:
+			app = utils.GuessAppFromLocation()
+			env = DEFAULT_ENVIRONMENT
 		}
 
 		// adjust working directory

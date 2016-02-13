@@ -25,8 +25,6 @@ import (
 	"github.com/tahitianstud/utils/io"
 )
 
-const DEFAULT_WORK_DIRECTORY = "."
-
 var (
 	cfgFile string
 	DebugMode bool
