@@ -15,33 +15,51 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+	"github.com/tahitianstud/ata/config"
+	"github.com/tahitianstud/ata/cmd/utils"
+	"strings"
+)
+
+var (
+	logger = config.Logger
+	app string
+	env string
 )
 
 // statusCmd represents the status command
 var statusCmd = &cobra.Command{
 	Use:   "status",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Gets application status",
+	Long: `Returns the application status for the <ENV> environment.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: Work your own magic here
-		fmt.Println("status called")
-		fmt.Println("TODO: implement me !")
+		logger.Trace("status called", nil)
 
-		if VerboseMode() {
-			fmt.Println("VERBOSE MODE: activated")
+		numberOfArgs := len(args)
+		logger.Debug("Found %d argument(s) to status command\n", numberOfArgs)
+
+		// 3 options possibles:
+		// - on a spécifié l'appli et l'environnement auquel cas on les utilise
+		// - on précise pas l'appli auquel cas on devine l'appli par rapport au répertoire courant
+		// - on précise rien ==> environnement local
+
+		// TODO: validate arguments
+
+		switch numberOfArgs {
+		case 2:
+			app = args[0]
+			env = strings.ToUpper(args[1])
+		case 1:
+			env = strings.ToUpper(args[0])
+			app = utils.GuessAppFromLocation()
 		}
 
-		if DebugMode() {
-			fmt.Println("DEBUG MODE: activated")
+		// adjust working directory
+		if WorkDirectory == DEFAULT_WORK_DIRECTORY {
+			WorkDirectory = DEFAULT_WORK_DIRECTORY + "/" + app
 		}
+
+		execute()
 	},
 }
 
@@ -49,13 +67,22 @@ func init() {
 	RootCmd.AddCommand(statusCmd)
 
 	// Here you will define your flags and configuration settings.
+}
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// statusCmd.PersistentFlags().String("foo", "", "A help for foo")
+func execute() {
+	logger.Debug("Execution for trace started !")
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// statusCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// TODO: implement me
+
+	// IS APP UP ?  If yes, get the number of containers
+	appIsUp, numOfContainers := utils.AppUp(app)
+	if appIsUp {
+		logger.Info("%s is STARTED", app, numOfContainers)
+		logger.Info("There are %d containers corresponding to %s\n", numOfContainers, app)
+		utils.PrintContainersList(app, false)
+	} else {
+		logger.Info("%s is NOT STARTED in environment %s", app, env)
+	}
+
 
 }

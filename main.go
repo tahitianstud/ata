@@ -20,10 +20,11 @@ import (
 
 	"github.com/tahitianstud/ata/cmd"
 	"github.com/tahitianstud/ata/config"
-	"github.com/tahitianstud/utils/logging"
 )
 
 const ok = "OK"
+
+var logger = config.Logger
 
 func main() {
 	config.Inject()
@@ -34,23 +35,8 @@ func main() {
 	out, bashErr := exec.Command("bash", "-c", "echo "+ok).Output()
 	output := strings.TrimSpace(string(out))
 	if bashErr != nil || output != ok {
-		mylogger := logging.New()
-		mylogger.Fatal("Bash environment not found")
+		logger.Fatal("Bash environment not found")
 	}
-
-	// TODO: deal with embedded scripts to use
-
-	// check opening file
-	// file, fileErr := static.Open("status.sh")
-	// if fileErr != nil {
-	// 	log.Fatal(fileErr.Error())
-	// }
-	// fmt.Print(file)
-	// defer file.Close()
-
-	// if Assets == nil {
-	// 	log.Die("Assets not found. Have you generated the resources ?")
-	// }
 
 	// - docker installed (check version too)
 	// - docker-compose installed

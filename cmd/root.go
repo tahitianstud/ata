@@ -16,16 +16,23 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tahitianstud/utils/logging"
+	"log"
+	"github.com/tahitianstud/utils/io"
 )
 
-var cfgFile string
-var debugMode, verboseMode bool
+const DEFAULT_WORK_DIRECTORY = "."
+
+var (
+	cfgFile string
+	DebugMode bool
+	VerboseMode bool
+	WorkDirectory string
+)
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -47,32 +54,15 @@ func Execute() {
 	}
 }
 
-// VerboseMode indicates if the flag for verbosity is set or not
-func VerboseMode() bool {
-	return verboseMode
-}
-
-// DebugMode indicates if debug traces are to be outputted or not
-func DebugMode() bool {
-	return debugMode
-}
-
 func init() {
 	cobra.OnInitialize(initConfig)
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports Persistent Flags, which, if defined here,
-	// will be global for your application.
 
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ata.yaml)")
 
 	// add flags for debug & verbose modes
-	RootCmd.PersistentFlags().BoolVarP(&debugMode, "debug", "d", false, "activate debug mode")
-	RootCmd.PersistentFlags().BoolVarP(&verboseMode, "verbose", "v", false, "prints more output")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	RootCmd.PersistentFlags().BoolVarP(&DebugMode, "debug", "d", false, "activate debug mode")
+	RootCmd.PersistentFlags().BoolVarP(&VerboseMode, "verbose", "v", false, "prints more output")
+	RootCmd.PersistentFlags().StringVarP(&WorkDirectory, "work-directory", "w", ".", "defines work directory")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -90,17 +80,15 @@ func initConfig() {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 
-	// TODO: deal with verbose and debug mode
+	// deal with verbose and debug mode
 	mylogger := logging.New()
-	if DebugMode() {
-		fmt.Println("Activating debug mode")
+	if DebugMode {
 		mylogger.SetLevel(logging.DebugLevel)
 	}
-	mylogger.ActivateVerboseOutput(VerboseMode())
-	mylogger.Info("Configuring logging subsystem using flags...")
-	mylogger.Info("Logging subsystem initialized")
-	mylogger.Debug("Successfully activated logging !")
-	mylogger.Trace("End of logging initialization")
+	mylogger.ActivateVerboseOutput(VerboseMode)
 
-	log.Printf("MYTEST my message")
+	// check that work directory exists
+	if ! io.DirectoryExists(WorkDirectory) {
+		log.Fatalf("Work directory '%s' does not exist or is not readable", WorkDirectory)
+	}
 }

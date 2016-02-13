@@ -34,6 +34,8 @@ to quickly create a Cobra application.`,
 		// TODO: Work your own magic here
 		fmt.Println("trace called")
 		cmd.DebugFlags()
+
+		
 	},
 }
 
