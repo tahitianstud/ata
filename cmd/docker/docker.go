@@ -19,7 +19,7 @@ func ActiveContainersCount(app string) (int, error) {
 		return -1, err
 	} else {
 		outputString := strings.Replace(string(out), "\n", "", -1)
-		result, outerr := strconv.ParseInt(outputString, 10, 64)
+		result, outerr := strconv.ParseInt(strings.Trim(outputString, " "), 10, 64)
 		return int(result), outerr
 	}
 }
