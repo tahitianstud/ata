@@ -24,7 +24,7 @@ func ActiveContainersCount(app string) (int, error) {
 	}
 }
 
-// GetContainersList
+// GetContainersList returns the string listing the containers
 func GetContainersList(app string, idsOnly bool) (string, error) {
 
 	//docker ps -a -q --filter=name=${__FILTER}

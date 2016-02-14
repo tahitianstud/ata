@@ -23,15 +23,15 @@ import (
 	"github.com/tahitianstud/utils/logging"
 	"log"
 	"github.com/tahitianstud/utils/io"
+	"github.com/tahitianstud/ata/config"
 )
-
-const DEFAULT_WORK_DIRECTORY = "."
 
 var (
 	cfgFile string
 	DebugMode bool
 	VerboseMode bool
 	WorkDirectory string
+	logger = config.Logger
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -81,11 +81,10 @@ func initConfig() {
 	}
 
 	// deal with verbose and debug mode
-	mylogger := logging.New()
 	if DebugMode {
-		mylogger.SetLevel(logging.DebugLevel)
+		logger.SetLevel(logging.DebugLevel)
 	}
-	mylogger.ActivateVerboseOutput(VerboseMode)
+	logger.ActivateVerboseOutput(VerboseMode)
 
 	// check that work directory exists
 	if ! io.DirectoryExists(WorkDirectory) {

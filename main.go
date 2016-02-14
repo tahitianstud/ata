@@ -39,6 +39,8 @@ func main() {
 	}
 
 	// - docker installed (check version too)
+
+
 	// - docker-compose installed
 	// - git installed
 

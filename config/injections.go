@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/tahitianstud/utils/logging"
-	"github.com/tahitianstud/utils/logging/framework"
+	"github.com/tahitianstud/utils/logging/logrus"
 )
 
 var Logger = logging.New()
@@ -13,5 +13,5 @@ func Inject() {}
 // provides Dependency Injection using factory methods
 func init() {
 	// use the CustomLogger Implementation for our logging
-	logging.New = framework.Logger
+	logging.New = logrus.Logger
 }

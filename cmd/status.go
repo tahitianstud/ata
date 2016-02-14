@@ -17,12 +17,11 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/tahitianstud/ata/config"
-	"github.com/tahitianstud/ata/cmd/utils"
-	"strings"
+	"github.com/tahitianstud/ata/cmd/helper"
+	"os"
 )
 
 var (
-	logger = config.Logger
 	app string
 	env string
 )
@@ -35,29 +34,7 @@ var statusCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		logger.Trace("status called", nil)
 
-		numberOfArgs := len(args)
-		logger.Debug("Found %d argument(s) to status command\n", numberOfArgs)
-
-		// 3 options possibles:
-		// - on a spécifié l'appli et l'environnement auquel cas on les utilise
-		// - on précise pas l'appli auquel cas on devine l'appli par rapport au répertoire courant
-		// - on précise rien ==> environnement local
-
-		// TODO: validate arguments
-
-		switch numberOfArgs {
-		case 2:
-			app = args[0]
-			env = strings.ToUpper(args[1])
-		case 1:
-			env = strings.ToUpper(args[0])
-			app = utils.GuessAppFromLocation()
-		}
-
-		// adjust working directory
-		if WorkDirectory == DEFAULT_WORK_DIRECTORY {
-			WorkDirectory = DEFAULT_WORK_DIRECTORY + "/" + app
-		}
+		parseCommandLine(args)
 
 		execute()
 	},
@@ -69,20 +46,25 @@ func init() {
 	// Here you will define your flags and configuration settings.
 }
 
+func parseCommandLine(args []string) {
+	app, env = helper.GetAppAndEnvFromArgs(args)
+
+	// adjust working directory
+	if WorkDirectory == config.DEFAULT_WORK_DIRECTORY {
+		WorkDirectory = config.DEFAULT_WORK_DIRECTORY + string(os.PathSeparator) + app
+	}
+}
+
 func execute() {
 	logger.Debug("Execution for trace started !")
 
-	// TODO: implement me
-
 	// IS APP UP ?  If yes, get the number of containers
-	appIsUp, numOfContainers := utils.AppUp(app)
+	appIsUp, numOfContainers := helper.AppUp(app)
 	if appIsUp {
-		logger.Info("%s is STARTED", app, numOfContainers)
+		logger.Info("%s is STARTED in %s", app, env)
 		logger.Info("There are %d containers corresponding to %s\n", numOfContainers, app)
-		utils.PrintContainersList(app, false)
+		helper.PrintContainersList(app, false)
 	} else {
-		logger.Info("%s is NOT STARTED in environment %s", app, env)
+		logger.Info("%s is NOT STARTED in environment %s\n", app, env)
 	}
-
-
 }
